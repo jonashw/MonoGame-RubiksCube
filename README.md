@@ -11,7 +11,7 @@ Features:
 
 TODO:
 
-- use textures on the faces for more realistic look
+- ~~use textures on the faces for more realistic look~~
 - add geometry to the side of layers (currently, the camera sees through to the background; see screenshot below)
 
 ![screenshot of missing layer geometry](http://i.imgur.com/ySVCXSt.png)

@@ -21,8 +21,8 @@ namespace MonoGameRubiksCube
             _squares = squares;
             ActiveLayer = CubeLayerCriteria.Get(Axis.X, AxisLandmark.Max);
             State = CubeState.Ready;
-            _autoTween = new Tween(Easing.Linear, 0, val => FreeRotateTotalAngle = val, MathHelper.PiOver2, 0.25f);
-            _snapTween = new Tween(Easing.Linear, 0, val => FreeRotateTotalAngle = val, 0, 0.125f);
+            _autoTween = new Tween(Easing.CubicOut, 0, val => FreeRotateTotalAngle = val, MathHelper.PiOver2, 0.25f);
+            _snapTween = new Tween(Easing.CubicOut, 0, val => FreeRotateTotalAngle = val, 0, 0.125f);
         }
 
         public enum CubeState
