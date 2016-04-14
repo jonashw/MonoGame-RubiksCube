@@ -38,7 +38,7 @@ namespace MonoGameRubiksCube
                 Position = new Vector3(0, 0.5f, -7f)
             };
 
-            _cube = CubeFactory.Create(GraphicsDevice);
+            _cube = CubeFactory.Create(GraphicsDevice, Content);
             _undoStack = new CubeUndoStack(_cube);
             _cube.OnMove(_undoStack.RegisterMove);
         }

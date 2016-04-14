@@ -1,22 +1,23 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGameRubiksCube
 {
     public static class CubeFactory
     {
-        public static Cube Create(GraphicsDevice graphics)
+        public static Cube Create(GraphicsDevice graphics, ContentManager content)
         {
             var effect = new
             {
-                r = colorEffect(graphics, new Color(208, 51, 68)),
-                o = colorEffect(graphics, new Color(241, 109, 51)),
-                y = colorEffect(graphics, new Color(255, 233, 59)),
-                g = colorEffect(graphics, new Color(66, 165, 82)),
-                b = colorEffect(graphics, new Color(29, 95, 194)),
-                w = colorEffect(graphics, Color.White)
+                r = colorEffect(graphics, content, "R", new Color(208, 51, 68)),
+                o = colorEffect(graphics, content, "O", new Color(241, 109, 51)),
+                y = colorEffect(graphics, content, "Y", new Color(255, 233, 59)),
+                g = colorEffect(graphics, content, "G", new Color(66, 165, 82)),
+                b = colorEffect(graphics, content, "B", new Color(29, 95, 194)),
+                w = colorEffect(graphics, content, "W", Color.White)
             };
 
             var rotation = new
@@ -60,7 +61,7 @@ namespace MonoGameRubiksCube
             return new Cube(squares);
         }
 
-        private static BasicEffect colorEffect(GraphicsDevice graphics, Color color)
+        private static BasicEffect colorEffect(GraphicsDevice graphics, ContentManager content, string textureNameSuffix, Color color)
         {
             var v = color.ToVector3();
             return new BasicEffect(graphics)
@@ -69,9 +70,9 @@ namespace MonoGameRubiksCube
                 AmbientLightColor = v,
                 DiffuseColor = v,
                 EmissiveColor = v,
-                SpecularColor = Vector3.Zero
-                //TextureEnabled = true,
-                //Texture = Content.Load<Texture2D>("square-star")
+                SpecularColor = Vector3.Zero,
+                TextureEnabled = true,
+                Texture = content.Load<Texture2D>("Square-" + textureNameSuffix)
             };
         }
     }
