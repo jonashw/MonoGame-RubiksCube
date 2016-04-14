@@ -12,11 +12,11 @@ namespace MonoGameRubiksCube
         {
             var effect = new
             {
-                r = colorTextureEffect(graphics, content, "R", new Color(208, 51, 68)),
-                o = colorTextureEffect(graphics, content, "O", new Color(241, 109, 51)),
-                y = colorTextureEffect(graphics, content, "Y", new Color(255, 233, 59)),
-                g = colorTextureEffect(graphics, content, "G", new Color(66, 165, 82)),
-                b = colorTextureEffect(graphics, content, "B", new Color(29, 95, 194)),
+                r = colorTextureEffect(graphics, content, "R", new Color(184, 0, 0)),
+                o = colorTextureEffect(graphics, content, "O", new Color(254, 106, 0)),
+                y = colorTextureEffect(graphics, content, "Y", new Color(255, 231, 53)),
+                g = colorTextureEffect(graphics, content, "G", new Color(1, 167, 93)),
+                b = colorTextureEffect(graphics, content, "B", new Color(25, 59, 255)),
                 w = colorTextureEffect(graphics, content, "W", Color.White),
                 wc = colorTextureEffect(graphics, content, "W-Center", Color.White),
                 k = colorEffect(graphics, new Color(11,11,11))
@@ -47,12 +47,12 @@ namespace MonoGameRubiksCube
 
             var squares = new[]
             {
-                new {effect = effect.w, rotation = rotation.none},
-                new {effect = effect.b, rotation = rotation.y090},
-                new {effect = effect.y, rotation = rotation.y180},
-                new {effect = effect.g, rotation = rotation.y270},
-                new {effect = effect.o, rotation = rotation.x090},
-                new {effect = effect.r, rotation = rotation.x270}
+                new {effect = effect.g, rotation = rotation.none},
+                new {effect = effect.r, rotation = rotation.y090},
+                new {effect = effect.b, rotation = rotation.y180},
+                new {effect = effect.o, rotation = rotation.y270},
+                new {effect = effect.y, rotation = rotation.x090},
+                new {effect = effect.w, rotation = rotation.x270}
             }.SelectMany(face =>
                 faceSquarePositions.Select(position =>
                     new Square(
@@ -73,7 +73,7 @@ namespace MonoGameRubiksCube
                 LightingEnabled = true,
                 AmbientLightColor = v,
                 DiffuseColor = v,
-                EmissiveColor = v,
+                EmissiveColor = Color.White.ToVector3(),
                 SpecularColor = Vector3.Zero,
                 TextureEnabled = true,
                 Texture = content.Load<Texture2D>("Square-" + textureNameSuffix)
