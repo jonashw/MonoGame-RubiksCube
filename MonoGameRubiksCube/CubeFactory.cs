@@ -10,16 +10,15 @@ namespace MonoGameRubiksCube
     {
         public static Cube Create(GraphicsDevice graphics, ContentManager content)
         {
-            var effect = new
+            var config = new
             {
-                r = colorTextureEffect(graphics, content, "R", new Color(184, 0, 0)),
-                o = colorTextureEffect(graphics, content, "O", new Color(254, 106, 0)),
-                y = colorTextureEffect(graphics, content, "Y", new Color(255, 231, 53)),
-                g = colorTextureEffect(graphics, content, "G", new Color(1, 167, 93)),
-                b = colorTextureEffect(graphics, content, "B", new Color(25, 59, 255)),
-                w = colorTextureEffect(graphics, content, "W", Color.White),
-                wc = colorTextureEffect(graphics, content, "W-Center", Color.White),
-                k = colorEffect(graphics, new Color(11,11,11))
+                r = new {colorId = SquareColorId.Red,    effect = textureColorEffect(graphics, content, "Square-R",        new Color(184, 0, 0))},
+                o = new {colorId = SquareColorId.Orange, effect = textureColorEffect(graphics, content, "Square-O",        new Color(254, 106, 0))},
+                y = new {colorId = SquareColorId.Yellow, effect = textureColorEffect(graphics, content, "Square-Y",        new Color(255, 231, 53))},
+                g = new {colorId = SquareColorId.Green,  effect = textureColorEffect(graphics, content, "Square-G",        new Color(1, 167, 93))},
+                b = new {colorId = SquareColorId.Blue,   effect = textureColorEffect(graphics, content, "Square-B",        new Color(25, 59, 255))},
+                w = new {colorId = SquareColorId.White,  effect = textureColorEffect(graphics, content, "Square-W",        Color.White)},
+                wc =new {colorId = SquareColorId.White,  effect = textureColorEffect(graphics, content, "Square-W-Center", Color.White)}
             };
 
             var rotation = new
@@ -47,25 +46,31 @@ namespace MonoGameRubiksCube
 
             var squares = new[]
             {
-                new {effect = effect.g, rotation = rotation.none},
-                new {effect = effect.r, rotation = rotation.y090},
-                new {effect = effect.b, rotation = rotation.y180},
-                new {effect = effect.o, rotation = rotation.y270},
-                new {effect = effect.y, rotation = rotation.x090},
-                new {effect = effect.w, rotation = rotation.x270}
+                new {config = config.g, rotation = rotation.none},
+                new {config = config.r, rotation = rotation.y090},
+                new {config = config.b, rotation = rotation.y180},
+                new {config = config.o, rotation = rotation.y270},
+                new {config = config.y, rotation = rotation.x090},
+                new {config = config.w, rotation = rotation.x270}
             }.SelectMany(face =>
                 faceSquarePositions.Select(position =>
-                    new Square(
-                        face.effect == effect.w && position == new Vector3(0, 0, 1)
-                            ? effect.wc
-                            : face.effect,
-                        face.rotation,
-                        position))).ToArray();
+                    face.config == config.w && position == new Vector3(0, 0, 1)
+                        ? new Square(
+                            config.wc.colorId,
+                            config.wc.effect,
+                            face.rotation,
+                            position)
+                        : new Square(
+                            face.config.colorId,
+                            face.config.effect,
+                            face.rotation,
+                            position)
+                    )).ToArray();
 
             return new Cube(squares);
         }
 
-        private static BasicEffect colorTextureEffect(GraphicsDevice graphics, ContentManager content, string textureNameSuffix, Color color)
+        private static BasicEffect textureColorEffect(GraphicsDevice graphics, ContentManager content, string textureName, Color color)
         {
             var v = color.ToVector3();
             return new BasicEffect(graphics)
@@ -76,20 +81,7 @@ namespace MonoGameRubiksCube
                 EmissiveColor = Color.White.ToVector3(),
                 SpecularColor = Vector3.Zero,
                 TextureEnabled = true,
-                Texture = content.Load<Texture2D>("Square-" + textureNameSuffix)
-            };
-        }
-
-        private static BasicEffect colorEffect(GraphicsDevice graphics, Color color)
-        {
-            var v = color.ToVector3();
-            return new BasicEffect(graphics)
-            {
-                LightingEnabled = true,
-                AmbientLightColor = v,
-                DiffuseColor = v,
-                EmissiveColor = v,
-                SpecularColor = Vector3.Zero
+                Texture = content.Load<Texture2D>(textureName)
             };
         }
     }

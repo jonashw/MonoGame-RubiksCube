@@ -144,6 +144,7 @@ namespace MonoGameRubiksCube
             g => string.Format("Active Layer Rotation = {0}", g._cube.FreeRotateTotalAngle),
             g => string.Format("Rotation Direction: {0}", g._cube.RotatePositive ? "Positive" : "Negative"),
             g => string.Format("Cube State = {0}", g._cube.State),
+            g => string.Format("Is Solved = {0}", g._cube.IsSolved()),
         };
 
         private readonly Func<Game1,string>[] _controlStringFunctions =

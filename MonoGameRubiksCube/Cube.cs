@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Microsoft.Xna.Framework;
 
@@ -31,6 +32,31 @@ namespace MonoGameRubiksCube
             FreeRotating,
             Snapping,
             AutoRotating
+        }
+
+        private static readonly ReadOnlyCollection<Vector3> FaceNormals = new ReadOnlyCollection<Vector3>(new []
+        {
+            Vector3.Up,
+            Vector3.Down,
+            Vector3.Left,
+            Vector3.Right,
+            Vector3.Forward,
+            Vector3.Backward
+        });
+
+        public bool IsSolved()
+        {
+            const float tolerance = 0.001f;
+            return FaceNormals.All(normal =>
+            {
+                var count = _squares.Where(s => Math.Abs(s.Normal.X - normal.X) < tolerance
+                                                && Math.Abs(s.Normal.Y - normal.Y) < tolerance
+                                                && Math.Abs(s.Normal.Z - normal.Z) < tolerance)
+                    .Select(s => s.ColorId)
+                    .Distinct()
+                    .Count();
+                return count == 1;
+            });
         }
 
         private readonly List<Action<Move>> _observers = new List<Action<Move>>();

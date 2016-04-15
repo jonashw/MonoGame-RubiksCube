@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using Microsoft.Xna.Framework;
 
 namespace MonoGameRubiksCube
@@ -33,6 +34,20 @@ namespace MonoGameRubiksCube
                 axisLandmarkToFloat(position),
                 position, axis);
         }
+
+        public static ReadOnlyCollection<CubeLayerCriteria> AllInstances = new ReadOnlyCollection<CubeLayerCriteria>(new []
+        {
+            Get(Axis.X, AxisLandmark.Min),
+            Get(Axis.X, AxisLandmark.Mid),
+            Get(Axis.X, AxisLandmark.Max),
+            Get(Axis.Y, AxisLandmark.Min),
+            Get(Axis.Y, AxisLandmark.Mid),
+            Get(Axis.Y, AxisLandmark.Max),
+            Get(Axis.Z, AxisLandmark.Min),
+            Get(Axis.Z, AxisLandmark.Mid),
+            Get(Axis.Z, AxisLandmark.Max)
+        });
+
 
         private static Vector3 axisToVector(Axis axis)
         {

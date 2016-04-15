@@ -6,6 +6,7 @@ Features:
 - keyboard controls
 - (rudimentary) mouse controls
 - unlimited undo
+- tells you when the cube is solved
 
 ![screenshot of solved cube](http://i.imgur.com/8fywA4X.png)
 

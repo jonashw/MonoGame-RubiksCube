@@ -8,12 +8,19 @@ namespace MonoGameRubiksCube
         private readonly VertexPositionNormalTexture[] _vertices;
         private readonly short[] _indices;
         public Vector3 Position;
+        public readonly SquareColorId ColorId;
         private readonly BasicEffect _effect;
         public Quaternion Rotation;
+
+        public Vector3 Normal
+        {
+            get { return (Matrix.CreateTranslation(Vector3.UnitZ)*_localRotation).Translation; }
+        }
         private Matrix _localRotation;
 
-        public Square(BasicEffect effect, Quaternion rotation, Vector3 position)
+        public Square(SquareColorId colorId, BasicEffect effect, Quaternion rotation, Vector3 position)
         {
+            ColorId = colorId;
             _effect = effect;
             _localRotation = Matrix.CreateFromQuaternion(rotation);
             Position = Vector3.Transform(position, rotation);
@@ -31,6 +38,7 @@ namespace MonoGameRubiksCube
                 1,3,2
             };
         }
+
 
         public void CrystallizePositionAndResetRotation()
         {
