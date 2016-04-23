@@ -42,6 +42,7 @@
     <Compile Include="Camera.cs" />
     <Compile Include="Controls.cs" />
     <Compile Include="Cube.cs" />
+    <Compile Include="CubeController.cs" />
     <Compile Include="CubeFactory.cs" />
     <Compile Include="CubeLayerCriteria.cs" />
     <Compile Include="CubeUndoStack.cs" />

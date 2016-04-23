@@ -93,5 +93,12 @@ namespace MonoGameRubiksCube
                     throw new ArgumentException("Unexpected axis: " + axis);
             }
         }
+
+        private static readonly Random _r = new Random();
+        public static CubeLayerCriteria GetRandom()
+        {
+            var index = _r.Next(0, AllInstances.Count - 1);
+            return AllInstances[index];
+        }
     }
 }

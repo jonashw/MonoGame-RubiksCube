@@ -15,6 +15,7 @@ namespace MonoGameRubiksCube
         private Cube _cube;
         private CubeUndoStack _undoStack;
         private readonly KeyboardEvents _keyboard = new KeyboardEvents();
+        private CubeController _cubeController;
         private SpriteFont _font;
         private bool _autoRotateMode = true;
 
@@ -41,6 +42,7 @@ namespace MonoGameRubiksCube
             _cube = CubeFactory.Create(GraphicsDevice, Content);
             _undoStack = new CubeUndoStack(_cube);
             _cube.OnMove(_undoStack.RegisterMove);
+            _cubeController = new CubeController(_cube, _undoStack);
         }
 
         protected override void Initialize()
@@ -77,26 +79,30 @@ namespace MonoGameRubiksCube
             var keyboardState = Keyboard.GetState();
             _keyboard.Update(keyboardState);
 
+            if (keyboardState.IsKeyDown(Keys.Y))
+            {
+                _cubeController.TryStartShuffle(15);
+            }
             if (keyboardState.IsKeyDown(Keys.Left))
             {
-                _cube.TryStepFreeRotation(-0.05f);
+                _cubeController.TryStepFreeRotation(-0.05f);
             }
             if (keyboardState.IsKeyDown(Keys.Right))
             {
-                _cube.TryStepFreeRotation(0.05f);
+                _cubeController.TryStepFreeRotation(0.05f);
             }
             if (keyboardState.IsKeyDown(Keys.Space))
             {
-                _cube.TryFinishFreeRotate();
+                _cubeController.TryFinishFreeRotate();
             }
             if (keyboardState.IsKeyDown(Keys.U))
             {
-                _undoStack.TryUndo();
+                _cubeController.TryUndo();
             }
 
             foreach (var k in Controls.All.Where(k => keyboardState.IsKeyDown(k.Key)))
             {
-                tryStartRotate(k.Layer, !keyboardState.IsKeyDown(Keys.LeftShift));
+                _cubeController.TryStartRotate(k.Layer, !keyboardState.IsKeyDown(Keys.LeftShift));
             }
 
             _cube.Update(gameTime);
@@ -106,11 +112,11 @@ namespace MonoGameRubiksCube
             var mouseMovement = (mousePosition - _lastMousePosition).ToVector2().Y;
             if (mouse.LeftButton == ButtonState.Pressed)
             {
-                _cube.TryFinishFreeRotate();
+                _cubeController.TryFinishFreeRotate();
             }
             _lastMousePosition = mousePosition;
 
-            _cube.TryStepFreeRotation(mouseMovement/100f);
+            _cubeController.TryStepFreeRotation(mouseMovement/100f);
 
             base.Update(gameTime);
         }
@@ -152,7 +158,8 @@ namespace MonoGameRubiksCube
             g => string.Format("Rotate X layers: [{0}] [{1}] [{2}]", Controls.X1.Key, Controls.X2.Key, Controls.X3.Key),
             g => string.Format("Rotate Y layers: [{0}] [{1}] [{2}]", Controls.Y1.Key, Controls.Y2.Key, Controls.Y3.Key),
             g => string.Format("Rotate Z layers: [{0}] [{1}] [{2}]", Controls.Z1.Key, Controls.Z2.Key, Controls.Z3.Key),
-            g => string.Format("Undo: U ({0} Left)", g._undoStack.Count)
+            g => string.Format("Undo: [U] ({0} Left)", g._undoStack.Count),
+            g => string.Format("Shuffle: [Y]")
         };
 
         private void drawUiText()
